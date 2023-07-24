@@ -1,5 +1,4 @@
 import json
-
 from settings import DATA_PATH
 
 
@@ -15,7 +14,7 @@ class Repository:
         """
         Метод считывает все записи из json-файла.
         """
-        with open(self.data_path) as file:
+        with open(self.data_path,encoding='utf-8') as file:
             return json.load(file)
 
     def remove_empty_transactions(self, all_transactions):
@@ -23,7 +22,8 @@ class Repository:
         Метод удаляет пустые записи из всех полученных трансакций
         и возвращает только непустые
         """
-        all_transactions.remove({})
+        if {} in all_transactions:
+            all_transactions.remove({})
         return all_transactions
 
     def get_last_five_transactions(self):
@@ -37,3 +37,4 @@ class Repository:
         non_empty_transaction = self.remove_empty_transactions(all_transactions)
         # И возвращаем пять последних трансакций, отсортировав список по статусу и дате
         return sorted(non_empty_transaction, key=lambda dictionary: (dict['status'], dictionary['date']), reverse=True)[:5]
+
